@@ -1,6 +1,10 @@
 # Ubuntu Auto Upgrade
 
-This python script will auto-upgrade ubuntu and send email notifications using SMTP. 
+These scripts are a rewrite of the following PHP scripts: 
+
+[ubuntu-auto-upgrade](https://github.com/diversen/ubuntu-auto-upgrade)
+
+The python scripts will upgrade ubuntu and send email notifications using SMTP. 
 It will probably also work with other Debian variants of linux.
 
 Tested on Ubuntu 20.04 LTS and 22.04 LTS
