@@ -11,7 +11,7 @@ Tested on Ubuntu 20.04 LTS and 22.04 LTS
 
 ## Install
 
-    git clone git@github.com:diversen/ubuntu-auto-upgrade-py.git
+    git clone https://github.com/diversen/ubuntu-auto-upgrade-py.git
     cd ubuntu-auto-upgrade-py
     virtualenv venv
     pip install -r requirements.txt
