@@ -14,6 +14,7 @@ Tested on Ubuntu 20.04 LTS and 22.04 LTS
     git clone https://github.com/diversen/ubuntu-auto-upgrade-py.git
     cd ubuntu-auto-upgrade-py
     virtualenv venv
+    source venv/bin/activate
     pip install -r requirements.txt
 
 ## Config
@@ -39,7 +40,7 @@ Add the crontab line and remember to change to your own source path.
 
 This will e.g. run the script every 10 minutes:
 
-    */10 * * * * cd /home/dennis/ubuntu-auto-upgrade-py && ./venv/bin/python cron.php
+    */10 * * * * cd /home/dennis/ubuntu-auto-upgrade-py && ./venv/bin/python cron.py
 
 ## Logs
 
