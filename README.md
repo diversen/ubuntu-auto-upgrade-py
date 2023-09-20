@@ -21,19 +21,21 @@ Create config file:
 Edit SMTP settings in `config.py`. 
 The `default_to` setting in SMTP is the email address of the person who will receive emails. 
 
-You can also edit `restart` that determines if the server should restart if needed. 
+You can also edit `restart` that determines if the server should restart when needed. 
 You may also set a `timezone`. 
 
 ## Cron
 
-Set the script up as a cron script. Let it run every 10 minutes of so.
+Set the script up as a cron script. Let it run every 10 minutes of once a week.
 You will need to let the script run as root. Edit crontab as `sudo`, e.g.: 
 
     sudo crontab -e
 
-Add the crontab line (change to your own source path):
+Add the crontab line and remember to change to your own source path. 
 
-    */10 * * * * cd /home/dennis/ubuntu-auto-upgrade && php cron.php
+This will e.g. run the script every 10 minutes:
+
+    */10 * * * * cd /home/dennis/ubuntu-auto-upgrade-py && ./venv/bin/python cron.php
 
 ## Logs
 
@@ -42,4 +44,3 @@ Logs are written to `logs/main.log`. This log file will be created if it does no
 # License
 
 MIT © [Dennis Iversen](https://github.com/diversen)
-
