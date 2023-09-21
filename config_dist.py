@@ -10,6 +10,7 @@ CONFIG = {
     "default_from": "System <mail@test.com>",
     "timezone": "Europe/Copenhagen",
     "restart": True,
+    "send_mail": True,
 
     # Paths. These are the default paths for Ubuntu 20.04 and 22.04
     "apt_check_path": "/usr/lib/update-notifier/apt-check",

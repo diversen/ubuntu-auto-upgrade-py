@@ -75,6 +75,9 @@ class AptAutoUpgrade:
         return self.needs_restart() and self.config["restart"]
 
     def send_mail(self, subject, message):
+        if not self.config["send_mail"]:
+            return
+
         try:
             with smtplib.SMTP_SSL(
                 self.config["host"],
