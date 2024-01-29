@@ -6,7 +6,7 @@ from datetime import datetime
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import pytz
-from config import CONFIG, after_reboot
+from config import CONFIG
 import logging
 
 
@@ -122,7 +122,6 @@ class AptAutoUpgrade:
                 os.unlink(self.lock_file)
                 logging.info(f"Removed lock file (restart success): {self.lock_file}")
                 self.send_mail(subject, message)
-                after_reboot()
 
             if self.has_updates():
                 logging.info("Server should be upgraded. Will now try to upgrade")

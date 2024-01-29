@@ -29,9 +29,6 @@ The `default_to` setting in SMTP is the email address of the person who will rec
 You can also edit `restart` that determines if the server should restart when needed. 
 You may also set a `timezone`. 
 
-You may also alter the function `after_reboot` if you may want to start some 
-service after the system has rebooted. 
-
 ## Cron
 
 Set the script up as a cron script. Let it run every 10 minutes of once a week.
