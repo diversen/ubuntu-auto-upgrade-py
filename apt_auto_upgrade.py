@@ -6,9 +6,7 @@ from datetime import datetime
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import pytz
-
-
-from config import CONFIG
+from config import CONFIG, after_reboot
 import logging
 
 
@@ -84,9 +82,7 @@ class AptAutoUpgrade:
                 self.config["port"],
                 context=ssl.create_default_context(),
             ) as server:
-                server.login(
-                    self.config["username"], self.config["password"]
-                )
+                server.login(self.config["username"], self.config["password"])
 
                 msg = MIMEMultipart("alternative")
                 msg["Subject"] = subject
@@ -126,6 +122,7 @@ class AptAutoUpgrade:
                 os.unlink(self.lock_file)
                 logging.info(f"Removed lock file (restart success): {self.lock_file}")
                 self.send_mail(subject, message)
+                after_reboot()
 
             if self.has_updates():
                 logging.info("Server should be upgraded. Will now try to upgrade")
