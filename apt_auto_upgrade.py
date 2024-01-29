@@ -99,8 +99,8 @@ class AptAutoUpgrade:
                 )
 
         except Exception as e:
-            # Fail silently on email error
-            print(f"Failed to send email: {e}")
+            # fail silently, but log the error
+            logging.error(f"Failed to send email: {e}")
 
     def restart(self):
         res = subprocess.run(
