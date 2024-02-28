@@ -1,23 +1,20 @@
 import subprocess
-import smtplib
-import ssl
 import os
 from datetime import datetime
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 import pytz
 from config import CONFIG
 import logging
 
+# from config try and import send_message
+try:
+    from config import send_message
+    logging.debug("send_message function imported from config")
 
-def configure_logging():
-    os.makedirs("logs", exist_ok=True)
-    logging.basicConfig(
-        filename="logs/main.log",
-        level=logging.INFO,
-        format="%(asctime)s - %(levelname)s - %(message)s",
-    )
-    logging.getLogger().addHandler(logging.StreamHandler())
+except ImportError:
+    logging.debug("send_message function NOT imported from config")
+
+    def send_message(subject, message):
+        pass
 
 
 class AptAutoUpgrade:
@@ -26,7 +23,6 @@ class AptAutoUpgrade:
         self.lock_file = "./restart.lock"
         timezone_str = self.config["timezone"]
         self.timezone = pytz.timezone(timezone_str)
-        configure_logging()
 
     def get_hostname(self):
         res = subprocess.run(["hostname"], capture_output=True, text=True)
@@ -72,36 +68,6 @@ class AptAutoUpgrade:
     def should_auto_restart(self):
         return self.needs_restart() and self.config["restart"]
 
-    def send_mail(self, subject, message):
-        if not self.config["send_mail"]:
-            return
-
-        try:
-            with smtplib.SMTP_SSL(
-                self.config["host"],
-                self.config["port"],
-                context=ssl.create_default_context(),
-            ) as server:
-                server.login(self.config["username"], self.config["password"])
-
-                msg = MIMEMultipart("alternative")
-                msg["Subject"] = subject
-                msg["From"] = self.config["default_from"]
-                msg["To"] = self.config["default_to"]
-
-                part1 = MIMEText(message, "plain")
-                msg.attach(part1)
-
-                server.sendmail(
-                    self.config["username"],
-                    self.config["default_to"],
-                    msg.as_string(),
-                )
-
-        except Exception as e:
-            # fail silently, but log the error
-            logging.error(f"Failed to send email: {e}")
-
     def restart(self):
         res = subprocess.run(
             ["/sbin/shutdown", "-r", "+1"], capture_output=True, text=True
@@ -121,7 +87,7 @@ class AptAutoUpgrade:
                 message = f"Server ({server_name}) was restarted.\n\n"
                 os.unlink(self.lock_file)
                 logging.info(f"Removed lock file (restart success): {self.lock_file}")
-                self.send_mail(subject, message)
+                send_message(subject, message)
 
             if self.has_updates():
                 logging.info("Server should be upgraded. Will now try to upgrade")
@@ -141,7 +107,7 @@ class AptAutoUpgrade:
                     else:
                         message += "You will need to restart the server manually\n\n"
 
-                self.send_mail(subject, message)
+                send_message(subject, message)
 
             return 0
 
@@ -151,5 +117,5 @@ class AptAutoUpgrade:
             message = (
                 f"There was an error while trying to upgrade the server:\n\n{e}\n\n"
             )
-            self.send_mail(subject, message)
+            send_message(subject, message)
             return 1
