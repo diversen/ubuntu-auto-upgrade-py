@@ -13,7 +13,7 @@ CONFIG = {
 CONFIG_SMTP = {
     # SMTP
     "host": "smtp-relay.sendinblue.com",
-    "port": 465,
+    "port": 587,
     "username": "some.user@test.com",
     "password": "password",
     "default_to": "mail@test.com",
