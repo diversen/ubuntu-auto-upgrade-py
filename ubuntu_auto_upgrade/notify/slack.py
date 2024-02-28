@@ -6,9 +6,6 @@ import logging
 
 def send_slack_message(subject, message):
 
-    print("send_slack_message")
-    return
-
     slack_token = CONFIG["slack_token"]
     client = WebClient(token=slack_token)
     text = f"{subject}\n{message}"
