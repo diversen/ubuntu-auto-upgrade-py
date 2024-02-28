@@ -12,12 +12,12 @@ CONFIG = {
 
 CONFIG_SMTP = {
     # SMTP
-    "host": "smtp-relay.sendinblue.com",
-    "port": 465,
-    "username": "some.user@test.com",
+    "host": "smtp-relay.brevo.com",
+    "port": 587,
+    "username": "smtp-username@test.com",
     "password": "password",
-    "default_to": "mail@test.com",
-    "default_from": "System <mail@test.com>",
+    "default_to": "to@test.com",
+    "default_from": "Server <mail@10kilobyte.com>",
 }
 
 CONFIG_SLACK = {

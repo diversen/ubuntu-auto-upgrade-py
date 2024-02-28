@@ -7,31 +7,30 @@ import logging
 
 
 def send_smtp_message(subject, message):
-    if not CONFIG["send_mail"]:
-        return
-
     try:
-        with smtplib.SMTP_SSL(
-            CONFIG["host"],
-            CONFIG["port"],
-            context=ssl.create_default_context(),
-        ) as server:
+        # Create a secure SSL context
+        context = ssl.create_default_context()
+
+        # Connect to the server using smtplib.SMTP and then upgrade to TLS
+        with smtplib.SMTP(CONFIG["host"], CONFIG["port"]) as server:
+            server.ehlo()  # Can be omitted
+            server.starttls(context=context)  # Secure the connection
+            server.ehlo()  # Can be omitted
             server.login(CONFIG["username"], CONFIG["password"])
 
+            # Prepare the email
             msg = MIMEMultipart("alternative")
             msg["Subject"] = subject
             msg["From"] = CONFIG["default_from"]
             msg["To"] = CONFIG["default_to"]
 
+            # Attach the message body
             part1 = MIMEText(message, "plain")
             msg.attach(part1)
 
-            server.sendmail(
-                CONFIG["username"],
-                CONFIG["default_to"],
-                msg.as_string(),
-            )
+            # Send the email
+            server.sendmail(CONFIG["username"], CONFIG["default_to"], msg.as_string())
 
     except Exception as e:
-        # fail silently, but log the error
         logging.error(f"Failed to send email: {e}")
+        logging.exception(e)
