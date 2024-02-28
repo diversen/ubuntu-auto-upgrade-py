@@ -8,6 +8,7 @@ import logging
 # from config try and import send_message
 try:
     from config import send_message
+
     logging.debug("send_message function imported from config")
 
 except ImportError:
@@ -24,10 +25,18 @@ class AptAutoUpgrade:
         timezone_str = self.config["timezone"]
         self.timezone = pytz.timezone(timezone_str)
 
+    def _subprocess_run(self, params) -> subprocess.CompletedProcess:
+        res = subprocess.run(
+            params,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+
+        return res
+
     def get_hostname(self):
-        res = subprocess.run(["hostname"], capture_output=True, text=True)
-        if res.returncode != 0:
-            raise Exception("Could not get server hostname")
+        res = self._subprocess_run(["hostname"])
         return res.stdout.strip()
 
     def parse_apt_check(self, apt_output):
@@ -35,32 +44,15 @@ class AptAutoUpgrade:
         return output_ary[0] != "0" or output_ary[1] != "0"
 
     def has_updates(self):
-        res = subprocess.run(
-            [self.config["apt_check_path"]], capture_output=True, text=True
-        )
+        res = self._subprocess_run([self.config["apt_check_path"]])
 
-        if res.returncode != 0:
-            raise Exception(res.stderr.strip())
+        # a bit weird that we are using stderr here
+        # but that's how the apt-check command works
         return self.parse_apt_check(res.stderr.strip())
 
     def upgrade(self):
-        # First, update the package list
-        res_update = subprocess.run(
-            ["apt-get", "update"],
-            capture_output=True,
-            text=True,
-        )
-        if res_update.returncode != 0:
-            raise Exception(res_update.stderr.strip())
-
-        # Then, perform a full system upgrade
-        res_upgrade = subprocess.run(
-            ["apt-get", "dist-upgrade", "-y"],
-            capture_output=True,
-            text=True,
-        )
-        if res_upgrade.returncode != 0:
-            raise Exception(res_upgrade.stderr.strip())
+        self._subprocess_run(["apt-get", "update", "-y"])
+        self._subprocess_run(["apt-get", "dist-upgrade", "-y"])
 
     def needs_restart(self):
         return os.path.exists(self.config["reboot_required_path"])
@@ -69,11 +61,7 @@ class AptAutoUpgrade:
         return self.needs_restart() and self.config["restart"]
 
     def restart(self):
-        res = subprocess.run(
-            ["/sbin/shutdown", "-r", "+1"], capture_output=True, text=True
-        )
-        if res.returncode != 0:
-            raise Exception(res.stderr.strip())
+        self._subprocess_run(["/sbin/shutdown", "-r", "+1"])
 
     def get_datetime(self):
         return datetime.now(self.timezone).strftime("%Y-%m-%d %H:%M:%S")
