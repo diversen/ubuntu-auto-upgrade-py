@@ -32,5 +32,5 @@ def send_smtp_message(subject, message):
             server.sendmail(CONFIG["username"], CONFIG["default_to"], msg.as_string())
 
     except Exception as e:
-        logging.exception(e)
         logging.error(f"Failed to send email: {e}")
+        logging.exception(e)

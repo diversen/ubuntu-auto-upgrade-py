@@ -15,3 +15,4 @@ def send_slack_message(subject, message):
         client.chat_postMessage(channel=CONFIG["slack_channel"], text=text)
     except SlackApiError as e:
         logging.error(f"Failed to send slack message: {e}")
+        logging.exception(e)
