@@ -7,8 +7,6 @@ import logging
 
 
 def send_smtp_message(subject, message):
-    if not CONFIG["send_mail"]:
-        return
 
     try:
         with smtplib.SMTP_SSL(
