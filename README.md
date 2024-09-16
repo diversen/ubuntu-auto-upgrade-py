@@ -14,6 +14,10 @@ The scripts may also send notifications via email or slack, or using a custom fu
     source venv/bin/activate
     pip install -r requirements.txt
 
+Using slack notifications:
+
+    pip install -r requirements_slack.txt
+
 ## Config
 
 Create config file:
@@ -36,9 +40,11 @@ You will need to let the script run as root. Edit crontab as `sudo`:
 
 Add a crontab line and remember to change to your own source path. 
 
-The following will run the script every 10 minutes:
+The following will run the script past midnight at 02.  
+The script will also run when the server is rebooted:
 
-    */10 * * * * cd /home/dennis/ubuntu-auto-upgrade-py && ./venv/bin/python cron.py
+    0 2 * * * cd /home/dennis/ubuntu-auto-upgrade-py && ./venv/bin/python cron.py
+    @reboot cd /home/dennis/ubuntu-auto-upgrade-py && ./venv/bin/python cron.py
 
 ## Logs
 
@@ -47,3 +53,13 @@ Logs are written to `logs/main.log`. The log file will be created if it does not
 # License
 
 MIT © [Dennis Iversen](https://github.com/diversen)
+
+# 
+
+pytz==2023.3.post1
+slack_sdk==3.27.1
+types-pytz==2024.1.0.20240203
+
+How to split above requirements.txt into so that I don't need to e.g install slack_sdk if I don't want to use slack notifications?
+
+Answer: You can create a `requirements.txt` file for each notification service. E.g. `requirements_slack.txt` and `requirements_email.txt`. Then you can install the requirements you need.

@@ -71,8 +71,10 @@ class AptAutoUpgrade:
             server_name = self.get_hostname()
 
             if os.path.exists(self.lock_file):
-                subject = f"Server ({server_name}) restarted with success"
+                subject = f"Server ({server_name}) restarted"
                 message = f"Server ({server_name}) was restarted.\n\n"
+                message += "You should check if everything is working as expected.\n\n"
+
                 os.unlink(self.lock_file)
                 logging.info(f"Removed lock file (restart success): {self.lock_file}")
                 send_message(subject, message)
@@ -83,6 +85,7 @@ class AptAutoUpgrade:
                 logging.info("Server upgraded")
                 subject = f"Server ({server_name}) upgraded with success"
                 message = f"Server ({server_name}) was upgraded.\n\n"
+                message += "You should check if everything is working as expected.\n\n"
 
                 if self.needs_restart():
                     message += "The server needs to be restarted\n\n"

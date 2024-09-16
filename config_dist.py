@@ -26,7 +26,7 @@ CONFIG_SLACK = {
 }
 
 CONFIG.update(CONFIG_SMTP)
-CONFIG.update(CONFIG_SLACK)
+# CONFIG.update(CONFIG_SLACK)
 
 
 def send_message(subject, message):
@@ -37,7 +37,7 @@ def send_message(subject, message):
     """
 
     from ubuntu_auto_upgrade.notify.smtp import send_smtp_message
-    from ubuntu_auto_upgrade.notify.slack import send_slack_message
+    # from ubuntu_auto_upgrade.notify.slack import send_slack_message
 
-    send_slack_message(subject, message)
+    # send_slack_message(subject, message)
     send_smtp_message(subject, message)
