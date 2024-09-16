@@ -67,8 +67,9 @@ class AptAutoUpgrade:
         return datetime.now(self.timezone).strftime("%Y-%m-%d %H:%M:%S")
 
     def run(self):
+        server_name = self.get_hostname()
+
         try:
-            server_name = self.get_hostname()
 
             if os.path.exists(self.lock_file):
                 subject = f"Server ({server_name}) restarted"
@@ -105,8 +106,7 @@ class AptAutoUpgrade:
         except Exception as e:
             logging.error(f"Error: {e}")
             subject = f"Server ({server_name}) upgrade failed"
-            message = (
-                f"There was an error while trying to upgrade the server:\n\n{e}\n\n"
-            )
+            message = f"There was an error while trying to upgrade the server: {server_name}\n\n"
+            message += f"Error: {e}\n\n"
             send_message(subject, message)
             return 1

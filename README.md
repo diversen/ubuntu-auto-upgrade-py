@@ -4,7 +4,7 @@ These python scripts upgrades your ubuntu server and they may also restart your 
 
 The scripts are tested on Ubuntu 20.04 LTS and 22.04 LTS. The scripts will probably also work with other Debian variants of linux. 
 
-The scripts may also send notifications via email or slack, or using a custom function.
+The scripts may also send notifications via SMTP, slack, mattermost, or using a custom function.
 
 ## Install
 
@@ -16,7 +16,11 @@ The scripts may also send notifications via email or slack, or using a custom fu
 
 Using slack notifications:
 
-    pip install -r requirements_slack.txt
+    pip install slack_sdk
+
+Using mattermost notifications:
+
+    pip install requests
 
 ## Config
 
@@ -29,7 +33,8 @@ You may edit `restart` which determines if the server should restart when needed
 You may also alter the `send_message` function. This function is called when the server is upgraded or
 if the server is restarted (or if it needs to be restarted).
 
-You may remove the `send_message` function if you do not want to send any messages.
+You may remove or alter the `send_message` function if you do not want to send any messages.
+Or send a message in a different way. 
 
 ## Cron
 
@@ -53,4 +58,3 @@ Logs are written to `logs/main.log`. The log file will be created if it does not
 # License
 
 MIT © [Dennis Iversen](https://github.com/diversen)
-

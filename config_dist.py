@@ -25,19 +25,27 @@ CONFIG_SLACK = {
     "slack_channel": "SLACK_CHANNEL_ID",
 }
 
-CONFIG.update(CONFIG_SMTP)
-# CONFIG.update(CONFIG_SLACK)
+# Mattermost specific
+CONFIG_MATTERMOST = {
+    "mattermost_webhook": "https://chat.openaws.dk/hooks/webhook-id",
+}
 
 
 def send_message(subject, message):
     """Define a default send_message function that sends messages
-    to both Slack and SMTP. This function can be replaced by a custom function
-    If they fail, the error is logged, but the exception is caught and ignored.
+    There is a couple of built-in functions that can be used to send messages to Slack, SMTP, and Mattermost.
+    If these message functions fail, the error is logged, but the exception is caught and ignored.
     This to avoid the upgrade process to fail if the notification fails.
+
+    This function can be replaced by a custom `send_message` function
     """
+    pass
 
-    from ubuntu_auto_upgrade.notify.smtp import send_smtp_message
     # from ubuntu_auto_upgrade.notify.slack import send_slack_message
-
     # send_slack_message(subject, message)
-    send_smtp_message(subject, message)
+
+    # from ubuntu_auto_upgrade.notify.smtp import send_smtp_message
+    # send_smtp_message(subject, message)
+
+    # from ubuntu_auto_upgrade.notify.mattermost import send_mattermost_message
+    # send_mattermost_message(subject, message)
