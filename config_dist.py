@@ -26,8 +26,11 @@ CONFIG_SLACK = {
 }
 
 # Mattermost specific
+# Mattermost specific
 CONFIG_MATTERMOST = {
-    "mattermost_webhook": "https://chat.openaws.dk/hooks/webhook-id",
+    "base_url": "https://my-mattermost-instance.com",
+    "token": "your-token-here",
+    "channel_id": "your-channel-id-here",
 }
 
 
