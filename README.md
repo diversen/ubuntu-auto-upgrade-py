@@ -10,17 +10,15 @@ The scripts may also send notifications via SMTP, slack, mattermost, or using a 
 
     git clone https://github.com/diversen/ubuntu-auto-upgrade-py.git
     cd ubuntu-auto-upgrade-py
-    virtualenv venv
-    source venv/bin/activate
-    pip install -r requirements.txt
+    uv sync
 
 Using slack notifications:
 
-    pip install slack_sdk
+    uv sync --extra slack
 
 Using mattermost notifications:
 
-    pip install requests
+    uv sync --extra mattermost
 
 ## Config
 
@@ -48,8 +46,10 @@ Add a crontab line and remember to change to your own source path.
 The following will run the script past midnight at 02.  
 The script will also run when the server is rebooted:
 
-    0 2 * * * cd /home/dennis/ubuntu-auto-upgrade-py && ./venv/bin/python cron.py
-    @reboot cd /home/dennis/ubuntu-auto-upgrade-py && ./venv/bin/python cron.py
+    0 2 * * * cd /home/dennis/ubuntu-auto-upgrade-py && uv run python cron.py
+    @reboot cd /home/dennis/ubuntu-auto-upgrade-py && uv run python cron.py
+
+If `uv` is not available in root's `PATH`, use the full path to the `uv` executable in the cron entries.
 
 ## Logs
 
